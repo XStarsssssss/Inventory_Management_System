@@ -95,16 +95,11 @@ public class Setting {
         switch (choice) {
             case 1 -> productService.viewProducts();
             case 2 -> {
-                System.out.println("-------------------------------------------");
-                System.out.println("Categories");
                 adminService.viewCategories();
-                System.out.println("-------------------------------------------");
                 System.out.println("If you want to exit enter 'b'");
                 String name = getString("Enter new Category Name: ");
                 if (name.equals(back)){
-                    System.out.println("-------------------------------------------");
-                    System.out.println("Back to AdminMenu..");
-                    adminMenu();
+                    Back();
                 }else {
                     adminService.createCategory(name);
                     System.out.println("-------------------------------------------");
@@ -115,9 +110,7 @@ public class Setting {
                 System.out.println("If you want to exit enter '0'");
                 int cid = getInt("Enter Category ID to add SubCategory: ");
                 if (cid == intback){
-                    System.out.println("-------------------------------------------");
-                    System.out.println("Back to AdminMenu...");
-                    adminMenu();
+                    Back();
                 }
                 else {
                     String name = getString("Enter new SubCategory Name: ");
@@ -180,52 +173,78 @@ public class Setting {
 
     // ================= ADD PRODUCT =================
     private void addProductFlow() {
+        System.out.println("If you want to exit enter 'b'");
         String name = getString("Product Name: ");
-        int qty = getInt("Quantity: ");
-        double cost = getDouble("Cost Price: ");
-        double sell = getDouble("Selling Price: ");
+        if (name.equals(back)) {
+            Back();
+        } else {
+            int qty = getInt("Quantity: ");
+            double cost = getDouble("Cost Price: ");
+            double sell = getDouble("Selling Price: ");
 
-        System.out.println("\nAvailable Categories:");
-        adminService.viewCategories();
-        int cid = getInt("Category ID: ");
+            System.out.println("\nAvailable Categories:");
+            adminService.viewCategories();
+            int cid = getInt("Category ID: ");
 
-        System.out.println("\nAvailable SubCategories:");
-        adminService.viewSubCategories(cid);
-        int sid = getInt("SubCategory ID: ");
+            System.out.println("\nAvailable SubCategories:");
+            adminService.viewSubCategories(cid);
+            int sid = getInt("SubCategory ID: ");
 
-        Category c = categoryRepo.findCategoryById(cid);
-        SubCategory s = categoryRepo.findSubCategoryById(c, sid);
+            Category c = categoryRepo.findCategoryById(cid);
+            SubCategory s = categoryRepo.findSubCategoryById(c, sid);
 
-        if (c == null || s == null) {
-            System.out.println("Invalid category/subcategory!");
-            return;
+
+            if (c == null || s == null) {
+                System.out.println("Invalid category/subcategory!");
+                return;
+            }
+
+            productService.addProduct(name, qty, cost, sell, c, s);
         }
-
-        productService.addProduct(name, qty, cost, sell, c, s);
     }
 
     private void updateProductFlow() {
+        System.out.println("If you want to exit enter '0'");
         int id = getInt("Product ID to update: ");
-        String name = getString("New Name: ");
-        double cost = getDouble("New Cost Price: ");
-        double sell = getDouble("New Selling Price: ");
-        productService.updateProduct(id, name, cost, sell);
+        if (id == intback) {
+            Back();
+        } else {
+            String name = getString("New Name: ");
+            double cost = getDouble("New Cost Price: ");
+            double sell = getDouble("New Selling Price: ");
+            productService.updateProduct(id, name, cost, sell);
+        }
     }
 
     private void deleteProductFlow() {
+        System.out.println("If you want to exit enter '0'");
         int id = getInt("Product ID to delete: ");
-        productService.deleteProduct(id);
+        if (id == intback) {
+            Back();
+        } else {
+            productService.deleteProduct(id);
+        }
     }
 
     private void sellProductFlow() {
+        System.out.println("If you want to exit enter '0'");
         int id = getInt("Product ID: ");
-        int qty = getInt("Quantity: ");
-        productService.sell(id, qty);
+        if (id == intback) {
+            Back();
+        } else {
+            int qty = getInt("Quantity: ");
+            productService.sell(id, qty);
+        }
     }
 
     private void searchProductFlow() {
+        System.out.println("If you want to exit enter 'b' or '0'");
         String keyword = getString("Enter Product ID or Name to search: ");
-        productService.search(keyword);
+        if (keyword.equals(back) || keyword.equals("0")) {
+            Back();
+        } else {
+            productService.search(keyword);
+        }
     }
 
     // ================= SAFE INPUT =================
@@ -254,5 +273,10 @@ public class Setting {
     private String getString(String msg) {
         System.out.print(msg);
         return sc.nextLine();
+    }
+    private void Back(){
+        System.out.println("-------------------------------------------");
+        System.out.println("Back to AdminMenu..");
+        adminMenu();
     }
 }

@@ -29,9 +29,7 @@ public class CategoryRepository {
     }
 
     public SubCategory createSubCategory(Category category, String name) {
-        SubCategory sub = new SubCategory(subCategoryId++, name);
-        category.addSubCategory(sub);
-        return sub;
+        return category.addSubCategory(name);
     }
 
     public List<Category> getCategories() {

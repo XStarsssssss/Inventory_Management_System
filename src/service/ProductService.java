@@ -23,7 +23,9 @@ public class ProductService {
         int id = repo.generateId();
         Product p = new Product(id, name, qty, cost, sell, c, s);
         repo.add(p);
+        System.out.println("----------------------------------------");
         System.out.println("Product added successfully!");
+        System.out.println("----------------------------------------");
     }
 
     // VIEW PRODUCTS
@@ -49,11 +51,15 @@ public class ProductService {
 
         Product p = repo.findById(id);
         if (p == null) {
+            System.out.println("----------------------------------------");
             System.out.println("Product not found!");
+            System.out.println("----------------------------------------");
             return;
         }
         p.update(name, cost, sell);
+        System.out.println("----------------------------------------");
         System.out.println("Product updated successfully!");
+        System.out.println("----------------------------------------");
     }
 
     // DELETE PRODUCT
@@ -63,7 +69,9 @@ public class ProductService {
             repo.delete(id);
             System.out.printf("Deleted Product -> ID: %d | Name: %s%n", p.getId(), p.getName());
         } else {
+            System.out.println("----------------------------------------");
             System.out.println("Product not found!");
+            System.out.println("----------------------------------------");
         }
     }
 
@@ -80,17 +88,10 @@ public class ProductService {
                 found = true;
             }
         }
-        if (!found) System.out.println("No product found!");
-    }
-
-    // STOCK IN
-    public void stockIn(int id, int qty) {
-        Product p = repo.findById(id);
-        if (p != null) {
-            p.increaseQuantity(qty);
-            System.out.println("Stock updated successfully!");
-        } else {
-            System.out.println("Product not found!");
+        if (!found) {
+            System.out.println("----------------------------------------");
+            System.out.println("No product found!");
+            System.out.println("----------------------------------------");
         }
     }
 
@@ -99,11 +100,15 @@ public class ProductService {
         viewProducts();
         Product p = repo.findById(id);
         if (p == null) {
+            System.out.println("----------------------------------------");
             System.out.println("Product not found!");
+            System.out.println("----------------------------------------");
             return;
         }
         if (p.getQuantity() < qty) {
-            System.out.println("Not enough stock!");
+            System.out.println("----------------------------------------");
+            System.out.println("Not enough item!");
+            System.out.println("----------------------------------------");
             return;
         }
 
@@ -131,8 +136,6 @@ public class ProductService {
 
         System.out.printf("\n%-20s %-5s %-15s %-10s %-20s%n",
                 "Product", "Qty", "Original Price", "Profit", "Date");
-        System.out.println("---------------------------------------------------------------------");
-
         for (Sale s : sales) {
             String productName = s.getProduct().getName();
             int qty = s.getQty();
@@ -159,11 +162,15 @@ public class ProductService {
         System.out.println("\nLow Stock Products ");
         for (Product p : repo.getAll()) {
             if (p.getQuantity() <= 5) {
+                System.out.println("----------------------------------------");
                 System.out.println(p.getId() + " | " + p.getName()
                         + " | Qty: " + p.getQuantity());
+                System.out.println("----------------------------------------");
                 found = true;
             }
         }
+        System.out.println("----------------------------------------");
         if (!found) System.out.println("No low stock products.");
+        System.out.println("----------------------------------------");
     }
 }

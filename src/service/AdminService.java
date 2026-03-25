@@ -15,32 +15,42 @@ public class AdminService {
     public void createCategory(String name) {
         repo.createCategory(name);
         System.out.println("Category created!");
+        System.out.println("----------------------------------------");
     }
 
     public void createSubCategory(int cid, String name) {
         Category c = repo.findCategoryById(cid);
         if (c == null) {
+            System.out.println("----------------------------------------");
             System.out.println("Category not found!");
+            System.out.println("----------------------------------------");
             return;
         }
 
         repo.createSubCategory(c, name);
+        System.out.println("----------------------------------------");
         System.out.println("SubCategory created!");
+        System.out.println("----------------------------------------");
     }
 
     public void viewCategories() {
+        System.out.println();
         System.out.println("Categories");
+        System.out.println("----------------------------------------");
         for (Category c : repo.getCategories()) {
             System.out.println(c.getId() + " - " + c.getName());
         }
-        System.out.println("-----------------------------------------");
+        System.out.println("----------------------------------------");
+
     }
 
     public void viewSubCategories(int cid) {
         Category c = repo.findCategoryById(cid);
 
         if (c == null) {
+            System.out.println("----------------------------------------");
             System.out.println("Category not found!");
+            System.out.println("----------------------------------------");
             return;
         }
 

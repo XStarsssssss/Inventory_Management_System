@@ -11,7 +11,8 @@ public class ProductRepository {
     private List<Product> products = new ArrayList<>();
     private int productId = 1;
 
-    private ProductRepository() {}
+    private ProductRepository() {
+    }
 
     public static ProductRepository getInstance() {
         if (instance == null) {
@@ -41,5 +42,13 @@ public class ProductRepository {
 
     public void delete(int id) {
         products.removeIf(p -> p.getId() == id);
+
+
+        for (int i = 0; i < products.size(); i++) {
+            products.get(i).setId(i + 1);
+        }
+
+
+        productId = products.size() + 1;
     }
 }

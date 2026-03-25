@@ -8,6 +8,8 @@ public class Category {
     private String name;
     private List<SubCategory> subCategories = new ArrayList<>();
 
+    private int subCategoryId = 1;
+
     public Category(int id, String name) {
         this.id = id;
         this.name = name;
@@ -20,7 +22,9 @@ public class Category {
         return subCategories;
     }
 
-    public void addSubCategory(SubCategory sub) {
+    public SubCategory addSubCategory(String name) {
+        SubCategory sub = new SubCategory(subCategoryId++, name);
         subCategories.add(sub);
+        return sub;
     }
 }
