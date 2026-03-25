@@ -247,6 +247,7 @@ public class Setting {
         }
     }
 
+
     // ================= SAFE INPUT =================
     private int getInt(String msg) {
         while (true) {
