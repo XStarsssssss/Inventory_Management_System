@@ -27,6 +27,22 @@ public class Category {
         subCategories.add(sub);
         return sub;
     }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void removeSubCategory(int subId) {
+        subCategories.removeIf(s -> s.getId() == subId);
+
+        for (int i = 0; i < subCategories.size(); i++) {
+            subCategories.get(i).setId(i + 1);
+        }
+
+        subCategoryId = subCategories.size() + 1;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
 
 
 }

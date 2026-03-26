@@ -14,8 +14,9 @@ public class AdminService {
 
     public void createCategory(String name) {
         repo.createCategory(name);
-        System.out.println("Category created!");
         System.out.println("----------------------------------------");
+        System.out.println("Category created!");
+
     }
 
     public void createSubCategory(int cid, String name) {

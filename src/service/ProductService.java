@@ -97,7 +97,6 @@ public class ProductService {
 
     // SELL PRODUCT
     public void sell(int id, int qty) {
-        viewProducts();
         Product p = repo.findById(id);
         if (p == null) {
             System.out.println("----------------------------------------");
@@ -165,12 +164,16 @@ public class ProductService {
                 System.out.println("----------------------------------------");
                 System.out.println(p.getId() + " | " + p.getName()
                         + " | Qty: " + p.getQuantity());
-                System.out.println("----------------------------------------");
                 found = true;
+
             }
         }
-        System.out.println("----------------------------------------");
-        if (!found) System.out.println("No low stock products.");
-        System.out.println("----------------------------------------");
+
+        if (!found){
+            System.out.println("----------------------------------------");
+            System.out.println("No low stock products.");
+            System.out.println("----------------------------------------");
+        }
+
     }
 }

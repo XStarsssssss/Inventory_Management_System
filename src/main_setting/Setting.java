@@ -53,10 +53,13 @@ public class Setting {
         }
     }
 
-    // ================= LOGIN =================
+    //  LOGIN
     private User login() {
         while (true) {
-            System.out.println("\n=== LOGIN (Admin or Staff) ===");
+            System.out.println();
+            System.out.println("-------------------------------------------");
+            System.out.println("          LOGIN (Admin or Staff)           ");
+            System.out.println("-------------------------------------------");
             System.out.print("Username: ");
             String u = sc.nextLine();
 
@@ -75,20 +78,28 @@ public class Setting {
         }
     }
 
-    // ================= ADMIN MENU =================
+    // ADMIN MENU
     private boolean adminMenu() {
-        System.out.println("\n=== ADMIN MENU ===");
+        System.out.println();
+        System.out.println("-------------------------------------------");
+        System.out.println("                 ADMIN MENU                ");
+        System.out.println("-------------------------------------------");
         System.out.println("1. View Products");
         System.out.println("2. Create Category");
         System.out.println("3. Create SubCategory");
         System.out.println("4. Add Product");
         System.out.println("5. Update Product");
         System.out.println("6. Delete Product");
-        System.out.println("7. Sell Product");
-        System.out.println("8. Search Product");
-        System.out.println("9. Low Stock Products");
-        System.out.println("10. Sales Report");
-        System.out.println("11. Logout");
+        System.out.println("7. Update Category");
+        System.out.println("8. Delete Category");
+        System.out.println("9. Update SubCategory");
+        System.out.println("10. Delete SubCategory");
+        System.out.println("11. Sell Product");
+        System.out.println("12. Search Product");
+        System.out.println("13. Low Stock Products");
+        System.out.println("14. Sales Report");
+        System.out.println("15. Logout");
+        System.out.println("-------------------------------------------");
 
         int choice = getInt("Choose: ");
 
@@ -129,14 +140,18 @@ public class Setting {
                 productService.viewProducts();
                 deleteProductFlow();
             }
-            case 7 -> {
+            case 7 -> updateCategoryFlow();
+            case 8 -> deleteCategoryFlow();
+            case 9 -> updateSubCategoryFlow();
+            case 10 -> deleteSubCategoryFlow();
+            case 11 -> {
                 productService.viewProducts();
                 sellProductFlow();
             }
-            case 8 -> searchProductFlow();
-            case 9 -> productService.lowStock();
-            case 10 -> productService.salesReport();
-            case 11 -> {
+            case 12 -> searchProductFlow();
+            case 13 -> productService.lowStock();
+            case 14 -> productService.salesReport();
+            case 15 -> {
                 System.out.println("Logging out...");
                 login();
             }
@@ -145,21 +160,23 @@ public class Setting {
 
         return false;
     }
-
-    // ================= STAFF MENU =================
+    //  STAFF MENU
     private boolean staffMenu() {
-        System.out.println("\n=== STAFF MENU ===");
+        System.out.println("-------------------------------------------");
+        System.out.println("                 STAFF MENU                ");
+        System.out.println("-------------------------------------------");
         System.out.println("1. View Products");
         System.out.println("2. Sell Product");
         System.out.println("3. Search Product");
         System.out.println("4. Report Low Stock");
         System.out.println("5. Logout");
+        System.out.println("-------------------------------------------");
 
         int choice = getInt("Choose: ");
 
         switch (choice) {
             case 1 -> productService.viewProducts();
-            case 2 -> sellProductFlow();
+            case 2 -> sellProductFlowStaff();
             case 3 -> searchProductFlow();
             case 4 -> productService.lowStock();
             case 5 -> {
@@ -171,7 +188,7 @@ public class Setting {
         return false;
     }
 
-    // ================= ADD PRODUCT =================
+    // Add Item
     private void addProductFlow() {
         System.out.println("If you want to exit enter 'b'");
         String name = getString("Product Name: ");
@@ -203,6 +220,39 @@ public class Setting {
         }
     }
 
+    // Sell Item
+    private void sellProductFlow() {
+        System.out.println("If you want to exit enter '0'");
+        int id = getInt("Product ID: ");
+        if (id == intback) {
+            Back();
+        } else {
+            int qty = getInt("Quantity: ");
+            productService.sell(id, qty);
+        }
+    }
+    private void sellProductFlowStaff() {
+        productService.viewProducts();
+        System.out.println("If you want to exit enter '0'");
+        int id = getInt("Product ID: ");
+        if (id == intback) {
+            BackStaff();
+        } else {
+            int qty = getInt("Quantity: ");
+            productService.sell(id, qty);
+        }
+    }
+
+    private void searchProductFlow() {
+        System.out.println("If you want to exit enter 'b' or '0'");
+        String keyword = getString("Enter Product ID or Name to search: ");
+        if (keyword.equals(back) || keyword.equals("0")) {
+            Back();
+        } else {
+            productService.search(keyword);
+        }
+    }
+    // Update
     private void updateProductFlow() {
         System.out.println("If you want to exit enter '0'");
         int id = getInt("Product ID to update: ");
@@ -225,30 +275,64 @@ public class Setting {
             productService.deleteProduct(id);
         }
     }
-
-    private void sellProductFlow() {
+    private void updateCategoryFlow() {
+        adminService.viewCategories();
         System.out.println("If you want to exit enter '0'");
-        int id = getInt("Product ID: ");
-        if (id == intback) {
-            Back();
-        } else {
-            int qty = getInt("Quantity: ");
-            productService.sell(id, qty);
+        int id = getInt("Category ID to update: ");
+        if (id == intback) return;
+
+        String name = getString("New Category Name: ");
+        categoryRepo.updateCategory(id, name);
+    }
+    private void deleteCategoryFlow() {
+        adminService.viewCategories();
+        System.out.println("If you want to exit enter '0'");
+        int id = getInt("Category ID to delete: ");
+        if (id == intback) return;
+
+        categoryRepo.deleteCategory(id);
+
+
+    }
+    private void updateSubCategoryFlow() {
+        adminService.viewCategories();
+        int cid = getInt("Category ID: ");
+        if (cid == intback) return;
+
+        Category c = categoryRepo.findCategoryById(cid);
+        if (c == null) {
+            System.out.println("Invalid Category!");
+            return;
         }
+
+        adminService.viewSubCategories(cid);
+        int sid = getInt("SubCategory ID to update: ");
+        if (sid == intback) return;
+
+        String name = getString("New SubCategory Name: ");
+        categoryRepo.updateSubCategory(c, sid, name);
+    }
+    private void deleteSubCategoryFlow() {
+        adminService.viewCategories();
+        int cid = getInt("Category ID: ");
+        if (cid == intback) return;
+
+        Category c = categoryRepo.findCategoryById(cid);
+        if (c == null) {
+            System.out.println("Invalid Category!");
+            return;
+        }
+
+        adminService.viewSubCategories(cid);
+        int sid = getInt("SubCategory ID to delete: ");
+        if (sid == intback) return;
+
+        categoryRepo.deleteSubCategory(c, sid);
+        System.out.println("SubCategory deleted successfully!");
     }
 
-    private void searchProductFlow() {
-        System.out.println("If you want to exit enter 'b' or '0'");
-        String keyword = getString("Enter Product ID or Name to search: ");
-        if (keyword.equals(back) || keyword.equals("0")) {
-            Back();
-        } else {
-            productService.search(keyword);
-        }
-    }
 
-
-    // ================= SAFE INPUT =================
+    //  SAFE INPUT
     private int getInt(String msg) {
         while (true) {
             try {
@@ -277,7 +361,14 @@ public class Setting {
     }
     private void Back(){
         System.out.println("-------------------------------------------");
-        System.out.println("Back to AdminMenu..");
+        System.out.println("Back to AdminMenu....");
+        System.out.println();
         adminMenu();
+    }
+    private void BackStaff(){
+        System.out.println("-------------------------------------------");
+        System.out.println("Back to StaffMenu....");
+        System.out.println();
+        staffMenu();
     }
 }

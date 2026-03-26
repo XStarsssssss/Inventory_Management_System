@@ -50,4 +50,49 @@ public class CategoryRepository {
         }
         return null;
     }
+    public void deleteCategory(int id) {
+        categories.removeIf(c -> c.getId() == id);
+
+        for (int i = 0; i < categories.size(); i++) {
+            categories.get(i).setId(i + 1);
+        }
+
+        categoryId = categories.size() + 1;
+        System.out.println("-----------------------------");
+        System.out.println("Category deleted successfully");
+        System.out.println("-----------------------------");
+    }
+
+    public void updateCategory(int id, String name) {
+        Category c = findCategoryById(id);
+        if (c != null) {
+            c.updateName(name);
+            System.out.println("-----------------------------");
+            System.out.println("Category updated successfully!");
+            System.out.println("-----------------------------");
+        }
+    }
+
+    public void deleteSubCategory(Category c, int subId) {
+        if (c != null) {
+            c.removeSubCategory(subId);
+            System.out.println("-----------------------------");
+            System.out.println("SubCategory deleted successfully!");
+            System.out.println("-----------------------------");
+        }
+    }
+
+    public void updateSubCategory(Category c, int subId, String name) {
+        if (c != null) {
+            for (SubCategory s : c.getSubCategories()) {
+                if (s.getId() == subId) {
+                    s.setName(name);
+                    System.out.println("-----------------------------");
+                    System.out.println("SubCategory updated successfully!");
+                    System.out.println("-----------------------------");
+                    break;
+                }
+            }
+        }
+    }
 }
