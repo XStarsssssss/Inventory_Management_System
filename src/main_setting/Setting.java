@@ -187,7 +187,10 @@ public class Setting {
 
         switch (choice) {
             case 1 -> productService.viewProducts();
-            case 2 -> sellProductFlowStaff();
+            case 2 ->{
+                productService.viewProducts();
+                sellProductFlowStaff();
+            }
             case 3 -> searchProductFlow();
             case 4 -> productService.lowStock();
             case 5 -> {
